@@ -1836,8 +1836,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c3fac9e16e1e43489234026f47203d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonTest
-  mainMenu: {fileID: 292996345}
-  tutorialMenu: {fileID: 1580647398}
   menus: {fileID: 1048143721}
 --- !u!4 &684191443
 Transform:

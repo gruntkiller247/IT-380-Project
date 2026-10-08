@@ -6,15 +6,6 @@ using UnityEngine;
 
 public class UIHandler : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
-    //[SerializeField] List<Menus> menus = new List<Menus>();
-
-    [SerializeField] GameObject mainMenu;
-    //[SerializeField] GameObject menu2;
-
-    [SerializeField] GameObject tutorialMenu;
-
     [SerializeField] Canvas menus;
     private static Transform[] elements; 
 
@@ -23,7 +14,7 @@ public class UIHandler : MonoBehaviour
     void Start()
     {
         if(elements == null)
-            elements = menus.GetComponentsInChildren<Transform>(true);
+          elements = menus.GetComponentsInChildren<Transform>(true);
             
     }
 
@@ -57,14 +48,7 @@ public class UIHandler : MonoBehaviour
     //Depreciate
     public void ToLevelSelect()
     {
-        //Debug.Log("Button Clicked");
-        
-        if(mainMenu.activeSelf)
-        {
-            //Debug.Log("Changing Menu!");
-            DeactivateThenActivate(GetTransformByName("Level Select"));
-        }
-        
+        DeactivateThenActivate(GetTransformByName("Level Select"));   
     }
 
     public void ToTutorial()
@@ -126,6 +110,28 @@ public class UIHandler : MonoBehaviour
         }
     }
 
+    private static void DisableUIByName(String name)
+    {
+        if(name == null)
+        {
+            Debug.LogError("Given a null transform!");
+            return;
+        }
+        
+        foreach(Transform element in elements)
+        {
+          
+            if(string.Equals(element.name,name))
+            {
+                 element.gameObject.SetActive(false);
+                 return;
+            }
+            
+        }
+        Debug.LogError("Failed to find UI to disable!");
+
+    }
+
     /*
         Iterates through the element array and sets active false everything but the given component. 
         Does not enable any inactive UI!
@@ -158,12 +164,6 @@ public class UIHandler : MonoBehaviour
     */
     private Transform GetTransformByName(string name)
     {
-        if(name == null)
-        {
-            Debug.LogError("Given a null UI name!");
-            return null;
-        }
-
         if(name == null)
         {
             Debug.LogError("GetCanvasByName given a null name!");
