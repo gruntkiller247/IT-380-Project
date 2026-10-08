@@ -33,15 +33,36 @@ public class UIHandler : MonoBehaviour
         
     }
 
-    public void OnClick()
+    public void ReturnToLevelSelect()
+    {
+        DeactivateThenActivate(GetTransformByName("Level Select"));
+    }
+
+    public void ToEasyLevel()
+    {
+        DeactivateThenActivate(GetTransformByName("Level Easy"));
+    }
+
+    public void ToMediumLevel()
+    {
+        DeactivateThenActivate(GetTransformByName("Level Medium"));
+    }
+
+    public void ToHardLevel()
+    {
+        DeactivateThenActivate(GetTransformByName("Level Hard"));
+    }
+
+
+    //Depreciate
+    public void ToLevelSelect()
     {
         //Debug.Log("Button Clicked");
         
         if(mainMenu.activeSelf)
         {
             //Debug.Log("Changing Menu!");
-            mainMenu.SetActive(false);
-            tutorialMenu.SetActive(true);
+            DeactivateThenActivate(GetTransformByName("Level Select"));
         }
         
     }
@@ -69,6 +90,12 @@ public class UIHandler : MonoBehaviour
     */
     private static void DeactivateThenActivate(Transform thing)
     {
+        if(thing == null)
+        {
+            Debug.LogError("Given a null UI!");
+            return;
+        }
+
         DeactivateAllOtherUI(thing);
         ActivateUI(thing);
     }
@@ -78,6 +105,13 @@ public class UIHandler : MonoBehaviour
     */
     private static void ActivateUI(Transform thing)
     {
+
+        if(thing == null)
+        {
+            Debug.LogError("Given a null transform!");
+            return;
+        }
+
         Transform parent = thing;
 
         while (parent != null)
@@ -99,6 +133,12 @@ public class UIHandler : MonoBehaviour
     */
     private static void DeactivateAllOtherUI(Transform thing)
     {
+        if(thing == null)
+        {
+            Debug.LogError("Given a null transform!");
+            return;
+        }
+
         foreach(Transform element in elements)
         {
            //Debug.Log("\n"+ element.name + "\n" + thing.name);
@@ -118,6 +158,12 @@ public class UIHandler : MonoBehaviour
     */
     private Transform GetTransformByName(string name)
     {
+        if(name == null)
+        {
+            Debug.LogError("Given a null UI name!");
+            return null;
+        }
+
         if(name == null)
         {
             Debug.LogError("GetCanvasByName given a null name!");
