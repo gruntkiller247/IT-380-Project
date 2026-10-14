@@ -117,6 +117,12 @@ public class UIHandler : MonoBehaviour
             Debug.LogError("Given a null transform!");
             return;
         }
+
+        if(string.Equals(name,"Background - Main"))
+        {
+            Debug.LogError("Cannot disable the Background - Main UI element!");
+            return ;
+        }
         
         foreach(Transform element in elements)
         {
@@ -133,7 +139,7 @@ public class UIHandler : MonoBehaviour
     }
 
     /*
-        Iterates through the element array and sets active false everything but the given component. 
+        Iterates through the element array and sets active false everything but the given component and the Background - Main. 
         Does not enable any inactive UI!
         Searches by NAME of the transform!
     */
@@ -148,7 +154,7 @@ public class UIHandler : MonoBehaviour
         foreach(Transform element in elements)
         {
            //Debug.Log("\n"+ element.name + "\n" + thing.name);
-           if (element == thing || element.IsChildOf(thing.transform))
+           if (element == thing || element.IsChildOf(thing.transform) || string.Equals(element.name,"Background - Main"))
            {
                 continue;
            }
