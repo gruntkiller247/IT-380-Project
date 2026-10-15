@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using TMPro.EditorUtilities;
 
 public class InputHandler : MonoBehaviour
 {
@@ -67,7 +68,7 @@ public class InputHandler : MonoBehaviour
 
             if(text != null)
             {
-                Debug.Log("Start Typing!");
+                //Debug.Log("Start Typing!");
                 foreach (char c in Input.inputString)
                 {
                     if (c == '\b') // has backspace/delete been pressed?
@@ -99,19 +100,16 @@ public class InputHandler : MonoBehaviour
     private TMP_Text LookForText(Transform ui)
     {
         TMP_Text text = null;
+        //Debug.Log(ui.name);
 
-        foreach(Transform element in ui)
+        text = ui.GetComponent<TMP_Text>();
+
+        if(text == null)
         {
-            Debug.Log(element.name);
-            if(string.Equals(element.name,"Typing"))
-            {
-                text = element.GetComponent<TMP_Text>();
-                Debug.Log("Found the typing element!");
-                return text;
-            }
+            Debug.Log("Did not find the typing element!");
         }
 
-        Debug.Log("Did not find the typing element!");
+        
         return text;
     }
 
