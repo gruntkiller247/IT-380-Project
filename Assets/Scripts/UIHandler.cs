@@ -1,21 +1,19 @@
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class UIHandler : MonoBehaviour
 {
     [SerializeField] Canvas menus;
+
+    [SerializeField] static String nameOfTypingBox = "Typing";
     private static Transform[] elements; 
-
-
-
+    
     void Start()
     {
         if(elements == null)
-          elements = menus.GetComponentsInChildren<Transform>(true);
-            
+        {
+            elements = menus.GetComponentsInChildren<Transform>(true);
+        }
     }
 
     // Update is called once per frame
@@ -45,7 +43,7 @@ public class UIHandler : MonoBehaviour
     }
 
 
-    //Depreciate
+    //Depreciated
     public void ToLevelSelect()
     {
         DeactivateThenActivate(GetTransformByName("Level Select"));   
@@ -70,9 +68,52 @@ public class UIHandler : MonoBehaviour
 
 
     /*
+        Returns the current active UI's text that can be written to by the player
+        Returns a transform of the active text UI or null
+    */
+    public static Transform GetTypingTextFromCurrentUI()
+    {
+        Transform currentActive = GetActiveUI();
+        
+        
+        foreach(Transform element in currentActive)
+        {
+            
+            if(string.Equals(element.name,nameOfTypingBox))
+            {
+                return element;
+            }
+
+
+        }
+
+        return null;
+    }
+    
+    /*
+        Returns the current active UI as a transform or null
+    */
+    public static Transform GetActiveUI()
+    {
+        foreach(Transform element in elements)
+        {
+            if(element.gameObject.activeInHierarchy == true)
+            {
+                if(!string.Equals("Background - Main",element.gameObject.name) && !string.Equals("Canvas",element.gameObject.name))
+                {
+                    return element;
+                } 
+            }
+        }
+
+        return null;
+    }
+
+
+    /*
         Deactivates all other UI then activates the transform UI + children    
     */
-    private static void DeactivateThenActivate(Transform thing)
+    public static void DeactivateThenActivate(Transform thing)
     {
         if(thing == null)
         {
@@ -87,7 +128,7 @@ public class UIHandler : MonoBehaviour
     /*
         Iterates through the element array and activates the transform + all children
     */
-    private static void ActivateUI(Transform thing)
+    public static void ActivateUI(Transform thing)
     {
 
         if(thing == null)
@@ -110,7 +151,11 @@ public class UIHandler : MonoBehaviour
         }
     }
 
-    private static void DisableUIByName(String name)
+
+    /*
+        Deactivates a UI element by name
+    */
+    public static void DisableUIByName(String name)
     {
         if(name == null)
         {
@@ -143,7 +188,7 @@ public class UIHandler : MonoBehaviour
         Does not enable any inactive UI!
         Searches by NAME of the transform!
     */
-    private static void DeactivateAllOtherUI(Transform thing)
+    public static void DeactivateAllOtherUI(Transform thing)
     {
         if(thing == null)
         {
@@ -168,7 +213,7 @@ public class UIHandler : MonoBehaviour
         Iterates through the element array looking for the named canvas.
         Returns the canvas or null
     */
-    private Transform GetTransformByName(string name)
+    public Transform GetTransformByName(string name)
     {
         if(name == null)
         {
