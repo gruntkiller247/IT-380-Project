@@ -1,18 +1,30 @@
 using System;
 using UnityEngine;
+using TMPro;
 
 public class UIHandler : MonoBehaviour
 {
     [SerializeField] Canvas menus;
 
     [SerializeField] static String nameOfTypingBox = "Typing";
+    [SerializeField] static String nameOfWordBox = "Word";
     private static Transform[] elements; 
     
+    private LevelHandler levelHandler;
     void Start()
     {
         if(elements == null)
         {
             elements = menus.GetComponentsInChildren<Transform>(true);
+        }
+
+        if(levelHandler == null)
+        {
+            levelHandler = GetComponent<LevelHandler>();
+            if(levelHandler == null)
+            {
+                Debug.LogError("Input handler failed to get LevelHandler!");
+            }
         }
     }
 
@@ -66,6 +78,63 @@ public class UIHandler : MonoBehaviour
         
     }
 
+    /*
+        Prompts the Level Handler for the next word then sets the text of the Word Text to that word
+    */
+
+    public void UpdateNextWord()
+    {
+        Transform wordBox = GetWordTextFromCurrentUI();
+        String word = null;
+        TMP_Text temp = null;
+
+        if(wordBox == null)
+        {
+            Debug.LogError("There is no word text box!");
+            return;
+        }
+
+        levelHandler.UpdateWord();
+        word = levelHandler.GetWordToWrite();
+
+        if(word == null)
+        {
+            Debug.LogError("There is no word to write! Defaulting to NULL!");
+            word = "NULL!";
+        }
+
+        temp = wordBox.GetComponent<TMP_Text>();
+
+        if(temp == null)
+        {
+            Debug.LogError("Failed to get wordBox's TMP_Text component!");
+            return;
+        }
+
+        temp.text = word;
+        
+    }
+
+    /*
+        Returns the current active UI's text that displays the current word to be typed
+        Returns a transform of the active text UI or null
+    */
+
+    public static Transform GetWordTextFromCurrentUI()
+    {
+        Transform currentActive = GetActiveUI();
+
+        foreach(Transform element in currentActive)
+        {
+            
+            if(string.Equals(element.name,nameOfWordBox))
+            {
+                return element;
+            }
+        }
+
+        return null;
+    }
 
     /*
         Returns the current active UI's text that can be written to by the player

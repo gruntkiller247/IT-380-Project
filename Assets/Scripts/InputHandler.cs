@@ -1,23 +1,23 @@
 using UnityEngine;
 using TMPro;
 using TMPro.EditorUtilities;
+using Unity.VisualScripting;
 
 public class InputHandler : MonoBehaviour
 {
-    [SerializeField] TMP_Text  text;
+    private TMP_Text  text;
 
-    [SerializeField] Transform textbox;
+    private Transform textbox;
 
-    [SerializeField] Transform textboxPast;
+    private Transform textboxPast;
 
     [SerializeField] bool uiUpdated = true;
 
     [SerializeField] bool inUse = false;
 
-    [SerializeField] LevelHandler levelHandler;
-    [SerializeField] UIHandler UIhandler;
-
-    private static string[] words; 
+    private LevelHandler levelHandler;
+    private UIHandler uiHandler;
+    [SerializeField] bool needUpdateWord = false;
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,11 +34,11 @@ public class InputHandler : MonoBehaviour
 
 
 
-        if(UIhandler == null)
+        if(uiHandler == null)
         {
-            UIhandler = GetComponent<UIHandler>();
+            uiHandler = GetComponent<UIHandler>();
 
-            if(UIhandler == null)
+            if(uiHandler == null)
             {
                 Debug.LogError("Input handler failed to get UIHandler!");
             }
@@ -68,6 +68,12 @@ public class InputHandler : MonoBehaviour
 
             if(text != null)
             {
+                if(needUpdateWord == true)
+                {
+                    uiHandler.UpdateNextWord();
+                    needUpdateWord = false;
+                }
+                
                 //Debug.Log("Start Typing!");
                 foreach (char c in Input.inputString)
                 {
@@ -80,7 +86,8 @@ public class InputHandler : MonoBehaviour
                     }
                     else if ((c == '\n') || (c == '\r')) // enter/return
                     {
-                        print("User entered their name: " + text.text);
+                        //print("User entered their name: " + text.text);
+                        text.text = "";
                     }
                     else
                     {
