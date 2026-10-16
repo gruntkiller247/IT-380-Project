@@ -79,6 +79,15 @@ public class UIHandler : MonoBehaviour
     }
 
     /*
+        Returns the next word or null
+    */
+
+    public string GetWordToWrite()
+    {
+        return levelHandler.GetWordToWrite();
+    }
+
+    /*
         Prompts the Level Handler for the next word then sets the text of the Word Text to that word
     */
 
@@ -95,7 +104,7 @@ public class UIHandler : MonoBehaviour
         }
 
         levelHandler.UpdateWord();
-        word = levelHandler.GetWordToWrite();
+        word = levelHandler.GetAndUpdateWordToWrite();
 
         if(word == null)
         {

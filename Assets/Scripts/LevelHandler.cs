@@ -21,10 +21,9 @@ public class LevelHandler : MonoBehaviour
     void Update()
     {
         
-        if(inLevel == true)
+        if(inLevel == true && updateWord == true)
         {
-            //Currently doing a test level!
-            
+            index++;
         }
     }
 
@@ -39,15 +38,31 @@ public class LevelHandler : MonoBehaviour
     }
 
     /*
+        Returns the word to write or null if there is no active level or no more words
+    */
+    public string GetWordToWrite()
+    {
+        if(inLevel == true)
+        {
+            if(index < words.Length)
+                return words[index];
+            else
+                return null;
+        }
+
+        return null;
+    }
+
+    /*
         Returns the current word to write in the level's list.
         Or return null in a level is not currently running!
     */
-    public string GetWordToWrite()
+    public string GetAndUpdateWordToWrite()
     {
         if(inLevel == true && updateWord == true)
         {
             updateWord = false;
-            return words[index++];
+            return words[index];
         }
             
         else

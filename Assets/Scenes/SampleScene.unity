@@ -2633,14 +2633,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09b0eebc7b5edd8438522693cc214846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputHandler
-  text: {fileID: 0}
-  textbox: {fileID: 0}
-  textboxPast: {fileID: 0}
   uiUpdated: 1
   inUse: 0
-  levelHandler: {fileID: 0}
-  UIhandler: {fileID: 0}
-  wordToWrite: 
+  needUpdateWord: 0
 --- !u!114 &684191445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2654,7 +2649,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelHandler
   inLevel: 0
-  words: []
 --- !u!1 &700338812
 GameObject:
   m_ObjectHideFlags: 0
@@ -4474,7 +4468,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Temp
+  m_text: '
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
