@@ -11,6 +11,7 @@ public class UIHandler : MonoBehaviour
     private static Transform[] elements; 
     
     private LevelHandler levelHandler;
+    private InputHandler inputHandler;
     void Start()
     {
         if(elements == null)
@@ -24,6 +25,15 @@ public class UIHandler : MonoBehaviour
             if(levelHandler == null)
             {
                 Debug.LogError("Input handler failed to get LevelHandler!");
+            }
+        }
+
+        if(inputHandler == null)
+        {
+            inputHandler = GetComponent<InputHandler>();
+            if(inputHandler == null)
+            {
+                Debug.LogError("UIHandler failed to find the InputHandler!");
             }
         }
     }
@@ -54,6 +64,12 @@ public class UIHandler : MonoBehaviour
         DeactivateThenActivate(GetTransformByName("Level Hard"));
     }
 
+    public void ToTestLevel()
+    {
+        DeactivateThenActivate(GetTransformByName("Level Test"));
+        StartLevel("Level Test");
+    }
+
 
     //Depreciated
     public void ToLevelSelect()
@@ -76,6 +92,46 @@ public class UIHandler : MonoBehaviour
 
         DeactivateThenActivate(thing);
         
+    }
+    /*
+        Recieves a string that is the name of the screen to go to. IE "Home"
+        Deactives the current level + stops the input manager
+        Returns nothing.
+    */
+    public void StopLevel(String levelName)
+    {
+        Transform level;
+        level = GetTransformByName(levelName);
+
+        if(level == null)
+        {
+            Debug.LogError("Stop Level failed to find a level! Nothing could be stopped!");
+            return;
+        }
+
+        inputHandler.StopInputHandler();
+        levelHandler.StopLevelHandler();
+    }
+
+    /*
+        Recieves a string that is the name of a level. Iterates through the array for the matching level.
+        Tells that level to start + starts the input manager.
+        Returns nothing.
+    */
+    public void StartLevel(String levelName)
+    {
+        Transform level;
+        level = GetTransformByName(levelName);
+
+        if(level == null)
+        {
+            Debug.LogError("Start Level failed to find a level! Nothing was started!");
+            return;
+        }
+
+        //Must call the stack in this order!
+        inputHandler.StartInputHandler();
+        levelHandler.StartLevelHandler();
     }
 
     /*
@@ -195,7 +251,7 @@ public class UIHandler : MonoBehaviour
     {
         if(thing == null)
         {
-            Debug.LogError("Given a null UI!");
+            Debug.LogError("Deactuvate then Activate: Given a null UI!");
             return;
         }
 

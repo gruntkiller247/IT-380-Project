@@ -21,10 +21,7 @@ public class LevelHandler : MonoBehaviour
     void Update()
     {
         
-        if(inLevel == true && updateWord == true)
-        {
-            index++;
-        }
+
     }
 
     public void SetInLevel(bool inbool)
@@ -44,10 +41,14 @@ public class LevelHandler : MonoBehaviour
     {
         if(inLevel == true)
         {
-            if(index < words.Length)
-                return words[index];
+            if(index-1 < words.Length)
+                return words[index-1];
             else
+            {
+                Debug.Log("Ran out of words to write! Returning Null!");
                 return null;
+            }
+                
         }
 
         return null;
@@ -59,10 +60,12 @@ public class LevelHandler : MonoBehaviour
     */
     public string GetAndUpdateWordToWrite()
     {
-        if(inLevel == true && updateWord == true)
+        if(inLevel == true)
         {
-            updateWord = false;
-            return words[index];
+            //updateWord = false;
+            index++;
+            return GetWordToWrite();
+            
         }
             
         else
@@ -71,7 +74,23 @@ public class LevelHandler : MonoBehaviour
 
     public void UpdateWord()
     {
-        updateWord = true;
+        //updateWord = true;
+
+        if(inLevel == true)
+        {
+            Debug.Log("Index: " + index);
+            
+        }
+    }
+
+    public void StartLevelHandler()
+    {
+        inLevel = true;
+    }
+
+    public void StopLevelHandler()
+    {
+        inLevel = false;
     }
 
 }

@@ -65,12 +65,25 @@ public class InputHandler : MonoBehaviour
             {
                 if(needUpdateWord == true)
                 {
+                    //Debug.Log("Need Update Word");
+                    //Code that updates the InputHandler with the next word to write + resets everything to default values.
                     uiHandler.UpdateNextWord();
                     currentWord = uiHandler.GetWordToWrite();
                     needUpdateWord = false;
                     currentWordIndex = 0;
                     numGreen = 0;
                     colorlessText = "";
+                    text.text = "";
+
+                    if(currentWord == null)
+                    {
+                        Debug.Log("Current word is null!");
+                    }
+                    else
+                    {
+                        Debug.Log("\n" + currentWord +"\n");
+                    }
+
                 }
                 
 
@@ -111,6 +124,18 @@ public class InputHandler : MonoBehaviour
                     }
                 }
             }
+
+            if(currentWord != null && numGreen == currentWord.Length)
+            {
+                //Code thate checks for the win condition/The current word is finished!
+                //Debug.Log("Word should change!");
+                needUpdateWord = true;
+            }
+
+        }
+        else if(trans == null && inUse == true)
+        {
+            Debug.LogError("I am meant to be in use but the Typing Box is null?");
         }
     }
 
@@ -153,6 +178,30 @@ public class InputHandler : MonoBehaviour
         return inUse;
     }
 
+    public void SetNeedsNewWord(bool val)
+    {
+        needUpdateWord = val;
+    }
+
+    public bool GetNeedsNewWord()
+    {
+        return needUpdateWord;
+    }
+
+    public void StopInputHandler()
+    {
+        inUse = false;
+        needUpdateWord = false;
+        uiUpdated = false;  
+    }
+
+    public void StartInputHandler()
+    {
+        inUse = true;
+        needUpdateWord = true;
+        uiUpdated = true;       
+    }
+
     /*
         Checks if the inputted char is the same as the current char in the current word
         Returns false if the index is out of bounds, the user gave an illegal character, or 
@@ -160,7 +209,14 @@ public class InputHandler : MonoBehaviour
     */
     private bool ValidateText(char word)
     {
-        char[] ogWordArray; 
+        char[] ogWordArray;
+
+
+        if(currentWord == null)
+        {
+            Debug.LogError("Validate Text: CurrentWord is null!");
+            return false;
+        }
 
         if(currentWordIndex < 0 || currentWordIndex >= currentWord.Length)
         {
