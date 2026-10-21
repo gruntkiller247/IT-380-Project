@@ -224,7 +224,7 @@ public class InputHandler : MonoBehaviour
             return false;
         }
 
-        if(word == '/' || word == '>' || word == '<' || word == '\\' || word == '\'' || word == '\"')
+        if(word == '/' || word == '>' || word == '<' || word == '\\' || word == '\'' || word == '\"' || word == ' ' || word == '\t' || word == '\n')
         {
             Debug.LogError("User gave an illegal character!");
             return false;
