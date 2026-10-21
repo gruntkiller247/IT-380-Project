@@ -125,7 +125,7 @@ public class InputHandler : MonoBehaviour
                 }
             }
 
-            if(currentWord != null && numGreen == currentWord.Length)
+            if(currentWord != null && numGreen != 0 && numGreen == currentWord.Length)
             {
                 //Code thate checks for the win condition/The current word is finished!
                 //Debug.Log("Word should change!");
