@@ -89,7 +89,12 @@ public class InputHandler : MonoBehaviour
 
                 foreach (char c in Input.inputString)
                 {
-                    if (c == '\b') // has backspace/delete been pressed?
+                    if(c == '\r')
+                    {
+                        //Debug.Log("FUCK YOU ENTER USERS!");
+                        //Get your input eated!
+                    }
+                    else if (c == '\b') // has backspace/delete been pressed?
                     {                        
                         
                         if(colorlessText.Length != 0)
@@ -100,11 +105,6 @@ public class InputHandler : MonoBehaviour
 
                         wordRed = false;
 
-                    }
-                    else if ((c == '\n') || (c == '\r')) // enter/return
-                    {
-                        //print("User entered their name: " + text.text);
-                        text.text = "";
                     }
                     else
                     {
@@ -119,6 +119,8 @@ public class InputHandler : MonoBehaviour
                             ColorChar(c,'r');
                         }
                         colorlessText +=  c;
+                        Debug.Log("\nColorless: " + colorlessText);
+                        Debug.Log("Text.text: " + text.text + "\n");
                         
                         
                     }
@@ -128,7 +130,9 @@ public class InputHandler : MonoBehaviour
             if(currentWord != null && numGreen != 0 && numGreen == currentWord.Length)
             {
                 //Code thate checks for the win condition/The current word is finished!
-                //Debug.Log("Word should change!");
+                Debug.Log("\nWord should change!");
+                Debug.Log("Colorless word: " + colorlessText);
+                Debug.Log("Text.text: " + text.text);
                 needUpdateWord = true;
             }
 
@@ -224,9 +228,9 @@ public class InputHandler : MonoBehaviour
             return false;
         }
 
-        if(word == '/' || word == '>' || word == '<' || word == '\\' || word == '\'' || word == '\"' || word == ' ' || word == '\t' || word == '\n')
+        if(word == '/' || word == '>' || word == '<' || word == '\\' || word == '\'' || word == '\"' || word == ' ' || word == '\t' || word == '\n' || word == '\r')
         {
-            Debug.LogError("User gave an illegal character!");
+            Debug.LogError($"User gave an illegal character! The char is: {(int)word}");
             return false;
         }
         
