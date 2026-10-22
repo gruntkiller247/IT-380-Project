@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class UIHandler : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class UIHandler : MonoBehaviour
 
     [SerializeField] static String nameOfTypingBox = "Typing";
     [SerializeField] static String nameOfWordBox = "Word";
+
+    [SerializeField] static String nameOfResultsBox = "Score";
     private static Transform[] elements; 
     
     private LevelHandler levelHandler;
@@ -71,7 +74,6 @@ public class UIHandler : MonoBehaviour
     }
 
 
-    //Depreciated
     public void ToLevelSelect()
     {
         DeactivateThenActivate(GetTransformByName("Level Select"));   
@@ -93,9 +95,85 @@ public class UIHandler : MonoBehaviour
         DeactivateThenActivate(thing);
         
     }
+
+    /*
+
+    */
+    public static Transform GetResultsTextFromCurrentUI()
+    {
+        Transform currentActive = GetActiveUI();
+        
+        
+        foreach(Transform element in currentActive)
+        {
+            
+            if(string.Equals(element.name,nameOfResultsBox))
+            {
+                return element;
+            }
+
+        }
+
+        return null;
+    }
+
+    
+    /*
+        Called by InputHandler when the game ends normally.
+        Recieves number of mistakes made and the time when the input manager was started for grading
+    */
+    public void EndLevel(int numCharMistakes, float levelStartTime)
+    {
+        Transform element;
+        string endText;
+        TMP_Text text;
+        //Debug.Log("Level is over!");
+
+        levelHandler.SetInLevel(false);
+        //Need to then open the UI to the results screen!
+        DeactivateThenActivate(GetTransformByName("Results")); 
+
+        element = GetActiveUI();
+
+        //Debug.Log("Element name: " + element.name);
+
+        if(element != null)
+        {
+            
+            endText = "You made: " + numCharMistakes + " mistakes!\nYou took " +  ((Time.time - levelStartTime)).ToString() + " seconds!"; 
+            
+            element = GetNamedTextFromCurrentUI("Score");
+
+            if(element == null)
+            {
+                Debug.LogError("Text element is NULL!");
+                return;
+            }
+
+            text = element.GetComponent<TMP_Text>();
+            
+            if(text == null)
+            {
+                Debug.LogError("TMP_Text component came back NULL!");
+                return;
+            }
+
+            text.text = endText;
+
+        }
+        else
+        {
+            Debug.LogError("Failed to find the active UI for results!");
+        }
+        levelHandler.StopLevelHandler();
+        inputHandler.StopInputHandler();
+    }
+
+
+
     /*
         Recieves a string that is the name of the screen to go to. IE "Home"
-        Deactives the current level + stops the input manager
+        Deactives the current level + stops the input manager. Does not change the UI menu!
         Returns nothing.
     */
     public void StopLevel(String levelName)
@@ -164,7 +242,7 @@ public class UIHandler : MonoBehaviour
 
         if(word == null)
         {
-            Debug.LogError("There is no word to write! Defaulting to NULL!");
+            //Debug.LogError("There is no word to write! Defaulting to NULL!");
             word = "NULL!";
         }
 
@@ -178,6 +256,25 @@ public class UIHandler : MonoBehaviour
 
         temp.text = word;
         
+    }
+
+    /*
+
+    */
+    public static Transform GetNamedTextFromCurrentUI(string name)
+    {
+        Transform currentActive = GetActiveUI();
+
+        foreach(Transform element in currentActive)
+        {
+            
+            if(string.Equals(element.name,name))
+            {
+                return element;
+            }
+        }
+
+        return null;
     }
 
     /*
@@ -366,4 +463,6 @@ public class UIHandler : MonoBehaviour
 
         return null;
     }
+
+
 }

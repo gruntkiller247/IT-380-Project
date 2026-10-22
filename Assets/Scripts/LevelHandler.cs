@@ -4,7 +4,7 @@ public class LevelHandler : MonoBehaviour
 {
     [SerializeField]  bool inLevel = false;
 
-    private string[] words = {"Apple", "Bacon", "Cups"};
+    private string[] words = {"Apple"};//{"Apple", "Bacon", "Cups"};
     //[SerializeField] string currentWord = null;
 
     private static int index = 0;
@@ -45,7 +45,7 @@ public class LevelHandler : MonoBehaviour
                 return words[index-1];
             else
             {
-                Debug.Log("Ran out of words to write! Returning Null!");
+                //Debug.Log("Ran out of words to write! Returning Null!");
                 return null;
             }
                 
@@ -78,7 +78,7 @@ public class LevelHandler : MonoBehaviour
 
         if(inLevel == true)
         {
-            Debug.Log("Index: " + index);
+            //Debug.Log("Index: " + index);
             
         }
     }
@@ -91,6 +91,7 @@ public class LevelHandler : MonoBehaviour
     public void StopLevelHandler()
     {
         inLevel = false;
+        index = 0;
     }
 
 }

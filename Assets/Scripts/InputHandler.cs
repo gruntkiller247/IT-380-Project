@@ -28,6 +28,10 @@ public class InputHandler : MonoBehaviour
 
     private bool wordRed = false;                               //Bool indicating whether the characters should always been drawn as red
                                                                 //Used when the user has missed more than 1 character
+
+    private int missedChars = 0;
+
+    private float inputStartTime = 0f;
     
 
     //This script speaks to the UIHandler and ask how the game should be handled
@@ -55,9 +59,20 @@ public class InputHandler : MonoBehaviour
 
         if(trans != null && inUse == true)
         {
+            //Debug.Log("Green: " + numGreen);
+            //Debug.Log("Word Length: " + currentWord);
+
+
+
             if(uiUpdated == true)
             {
                 text = LookForText(trans);
+
+                if(text == null)
+                {
+                    Debug.LogError("Text is NULL!");
+                }
+
                 uiUpdated = false;
             }
 
@@ -69,12 +84,29 @@ public class InputHandler : MonoBehaviour
                     //Code that updates the InputHandler with the next word to write + resets everything to default values.
                     uiHandler.UpdateNextWord();
                     currentWord = uiHandler.GetWordToWrite();
+                    
+
+                    //Ending the level check!
+                    if(currentWord == null)
+                    {
+                        //Debug.Log("Current Word is NULL!");
+                        uiUpdated = false;
+                        inUse = false;
+
+                        uiHandler.EndLevel(missedChars,inputStartTime);
+                        //Send data on missed words etc here!
+                        
+                        //Reseting the stats recorded! done by parent!
+                        
+                    }
+                    
                     needUpdateWord = false;
                     currentWordIndex = 0;
                     numGreen = 0;
                     colorlessText = "";
                     text.text = "";
 
+                    /*
                     if(currentWord == null)
                     {
                         Debug.Log("Current word is null!");
@@ -83,6 +115,7 @@ public class InputHandler : MonoBehaviour
                     {
                         Debug.Log("\n" + currentWord +"\n");
                     }
+                    */
 
                 }
                 
@@ -91,8 +124,8 @@ public class InputHandler : MonoBehaviour
                 {
                     if(c == '\r')
                     {
-                        //Debug.Log("FUCK YOU ENTER USERS!");
-                        //Get your input eated!
+                        //DO NOT ALLOW THE ENTER INPUT TO BE ACCEPTED!
+                        //IT BREAKS MANY THINGS NO MATTER HOW MANY TIMES I FIX IT!
                     }
                     else if (c == '\b') // has backspace/delete been pressed?
                     {                        
@@ -116,11 +149,12 @@ public class InputHandler : MonoBehaviour
                         }
                         else
                         {
+                            missedChars++;
                             ColorChar(c,'r');
                         }
                         colorlessText +=  c;
-                        Debug.Log("\nColorless: " + colorlessText);
-                        Debug.Log("Text.text: " + text.text + "\n");
+                        //Debug.Log("\nColorless: " + colorlessText);
+                        //Debug.Log("Text.text: " + text.text + "\n");
                         
                         
                     }
@@ -130,9 +164,9 @@ public class InputHandler : MonoBehaviour
             if(currentWord != null && numGreen != 0 && numGreen == currentWord.Length)
             {
                 //Code thate checks for the win condition/The current word is finished!
-                Debug.Log("\nWord should change!");
-                Debug.Log("Colorless word: " + colorlessText);
-                Debug.Log("Text.text: " + text.text);
+                //Debug.Log("\nWord should change!");
+                //Debug.Log("Colorless word: " + colorlessText);
+                //Debug.Log("Text.text: " + text.text);
                 needUpdateWord = true;
             }
 
@@ -197,13 +231,19 @@ public class InputHandler : MonoBehaviour
         inUse = false;
         needUpdateWord = false;
         uiUpdated = false;  
+
+        missedChars = 0;
+        inputStartTime = 0;
     }
 
     public void StartInputHandler()
     {
         inUse = true;
         needUpdateWord = true;
-        uiUpdated = true;       
+        uiUpdated = true;  
+
+        missedChars = 0;
+        inputStartTime = Time.time;  
     }
 
     /*
@@ -280,6 +320,7 @@ public class InputHandler : MonoBehaviour
         text.text = "";
         currentWordIndex = 0;
         wordRed = false;
+        numGreen = 0;
         
         foreach(char c in words)
         {
