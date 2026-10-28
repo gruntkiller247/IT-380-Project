@@ -135,11 +135,6 @@ public class LevelHandler : MonoBehaviour
 
             words = wordList.ToArray();
 
-            foreach(string word in words)
-            {
-                Debug.Log(word);
-            }
-
         }
 
         
