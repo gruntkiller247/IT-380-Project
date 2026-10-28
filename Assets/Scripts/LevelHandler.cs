@@ -1,4 +1,6 @@
+using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class LevelHandler : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class LevelHandler : MonoBehaviour
 
     public static bool updateWord = false;
 
+    private Object[] levelText;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -20,7 +24,12 @@ public class LevelHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log("\n");
+        for(int c=0;c<words.Length;c++)
+        {
+            Debug.Log(words[c]);
+        }
+        Debug.Log("\n");
 
     }
 
@@ -83,8 +92,65 @@ public class LevelHandler : MonoBehaviour
         }
     }
 
-    public void StartLevelHandler()
+    public void StartLevelHandler(string levelName)
     {
+        string[] wordList;
+        int c = 0;
+        string temp = "";
+
+        if(levelName == null)
+        {
+            Debug.LogError("Illegel level name given! No level can start!");
+            return;
+        }
+
+        levelText = Resources.LoadAll(levelName,typeof(TextAsset));
+
+        if(levelText == null)
+        {
+            Debug.LogError("Failed to load the levelText file!");
+            return;
+        }
+        else
+        {
+            //Debug.Log("Found the levelTexT!");
+            //wordList = new string[levelText.Length];
+
+            for(c = 0; c < levelText.Length;c++)
+            {
+                //Debug.Log(levelText[c].ToString());
+
+                //for(d = 0;d < levelText[c].len)
+                //This gets the entire chunk of words + commas
+                //I gotta substring this shit!
+                //Using indexOf ',' and split based on that
+                //wordList[c] = (string) levelText[c];
+            }
+
+            words = new string[levelText[0].ToString().Length];
+
+            for(c = 0;c < levelText[0].ToString().Length;c++)
+            {
+                //Debug.Log(levelText[0].ToString()[c]);
+                if(levelText[0].ToString()[c].CompareTo(',') != 0)
+                {
+                    temp = temp + levelText[0].ToString()[c];
+                }
+                else
+                {
+                    //Hit a csv spot
+                    Debug.Log(temp);
+                    words[c] = temp;
+                    Debug.Log(words[c] + "\n");
+                    temp = "";
+                }
+                
+            }
+
+        }
+
+        
+
         inLevel = true;
     }
 

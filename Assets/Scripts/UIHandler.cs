@@ -209,7 +209,7 @@ public class UIHandler : MonoBehaviour
 
         //Must call the stack in this order!
         inputHandler.StartInputHandler();
-        levelHandler.StartLevelHandler();
+        levelHandler.StartLevelHandler(levelName);
     }
 
     /*
