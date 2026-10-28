@@ -24,12 +24,14 @@ public class LevelHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         Debug.Log("\n");
         for(int c=0;c<words.Length;c++)
         {
             Debug.Log(words[c]);
         }
         Debug.Log("\n");
+        */
 
     }
 
@@ -76,7 +78,6 @@ public class LevelHandler : MonoBehaviour
             return GetWordToWrite();
             
         }
-            
         else
             return null;
     }
@@ -94,9 +95,9 @@ public class LevelHandler : MonoBehaviour
 
     public void StartLevelHandler(string levelName)
     {
-        string[] wordList;
         int c = 0;
         string temp = "";
+        List<string> wordList = new List<string>();
 
         if(levelName == null)
         {
@@ -113,21 +114,8 @@ public class LevelHandler : MonoBehaviour
         }
         else
         {
-            //Debug.Log("Found the levelTexT!");
-            //wordList = new string[levelText.Length];
-
-            for(c = 0; c < levelText.Length;c++)
-            {
-                //Debug.Log(levelText[c].ToString());
-
-                //for(d = 0;d < levelText[c].len)
-                //This gets the entire chunk of words + commas
-                //I gotta substring this shit!
-                //Using indexOf ',' and split based on that
-                //wordList[c] = (string) levelText[c];
-            }
-
-            words = new string[levelText[0].ToString().Length];
+            //words = new string[levelText[0].ToString().Length];
+            //Needs to be rewritten. Length is too long needs to be equal to num words
 
             for(c = 0;c < levelText[0].ToString().Length;c++)
             {
@@ -139,12 +127,17 @@ public class LevelHandler : MonoBehaviour
                 else
                 {
                     //Hit a csv spot
-                    Debug.Log(temp);
-                    words[c] = temp;
-                    Debug.Log(words[c] + "\n");
+                    //words[c] = temp;
+                    wordList.Add(temp);
                     temp = "";
                 }
-                
+            }
+
+            words = wordList.ToArray();
+
+            foreach(string word in words)
+            {
+                Debug.Log(word);
             }
 
         }
