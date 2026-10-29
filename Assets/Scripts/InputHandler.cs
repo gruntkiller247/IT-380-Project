@@ -80,7 +80,7 @@ public class InputHandler : MonoBehaviour
             {
                 if(needUpdateWord == true)
                 {
-                    //Debug.Log("Need Update Word");
+                    Debug.Log("Need Update Word");
                     //Code that updates the InputHandler with the next word to write + resets everything to default values.
                     uiHandler.UpdateNextWord();
                     currentWord = uiHandler.GetWordToWrite();
