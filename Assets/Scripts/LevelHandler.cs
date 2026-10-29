@@ -33,7 +33,7 @@ public class LevelHandler : MonoBehaviour
         Debug.Log("\n");
         */
 
-        Debug.Log("Current index: " + index);
+        //Debug.Log("Current index: " + index);
 
     }
 
@@ -134,6 +134,7 @@ public class LevelHandler : MonoBehaviour
                     temp = "";
                 }
             }
+            wordList.Add(temp);
 
             words = wordList.ToArray();
 
