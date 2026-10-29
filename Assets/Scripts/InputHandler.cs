@@ -268,7 +268,7 @@ public class InputHandler : MonoBehaviour
             return false;
         }
 
-        if(word == '/' || word == '>' || word == '<' || word == '\\' || word == '\'' || word == '\"' || word == ' ' || word == '\t' || word == '\n' || word == '\r')
+        if(word == '/' || word == '>' || word == '<' || word == '\\' || word == '\'' || word == '\"' || word == '\t' || word == '\n' || word == '\r')
         {
             Debug.LogError($"User gave an illegal character! The char is: {(int)word}");
             return false;

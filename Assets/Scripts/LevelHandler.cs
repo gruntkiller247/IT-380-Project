@@ -33,6 +33,8 @@ public class LevelHandler : MonoBehaviour
         Debug.Log("\n");
         */
 
+        //Debug.Log("Current index: " + index);
+
     }
 
     public void SetInLevel(bool inbool)
@@ -105,7 +107,7 @@ public class LevelHandler : MonoBehaviour
             return;
         }
 
-        levelText = Resources.LoadAll(levelName,typeof(TextAsset));
+        levelText = Resources.LoadAll("Levels/" + levelName,typeof(TextAsset));
 
         if(levelText == null)
         {
@@ -116,7 +118,7 @@ public class LevelHandler : MonoBehaviour
         {
             //words = new string[levelText[0].ToString().Length];
             //Needs to be rewritten. Length is too long needs to be equal to num words
-
+            
             for(c = 0;c < levelText[0].ToString().Length;c++)
             {
                 //Debug.Log(levelText[0].ToString()[c]);
