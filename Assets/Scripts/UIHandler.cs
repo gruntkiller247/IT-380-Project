@@ -122,6 +122,10 @@ public class UIHandler : MonoBehaviour
     /*
         Called by InputHandler when the game ends normally.
         Recieves number of mistakes made and the time when the input manager was started for grading
+        When a level is ended early, use this function but give numCharMistakes -1
+        When it recieves -1 that means another UI button is trying to move the game to somewhere that is not the results screen
+        Such as the level select menu
+        This function then just needs to stop the game!
     */
     public void EndLevel(int numCharMistakes, float levelStartTime)
     {
@@ -175,7 +179,7 @@ public class UIHandler : MonoBehaviour
         }
 
         skip:
-        
+
         levelHandler.StopLevelHandler();
         inputHandler.StopInputHandler();
     }
