@@ -50,6 +50,7 @@ public class UIHandler : MonoBehaviour
     public void ReturnToLevelSelect()
     {
         DeactivateThenActivate(GetTransformByName("Level Select"));
+        EndLevel(-1,-1);
     }
 
     public void ToEasyLevel()
@@ -129,7 +130,14 @@ public class UIHandler : MonoBehaviour
         TMP_Text text;
         //Debug.Log("Level is over!");
 
+        
         levelHandler.SetInLevel(false);
+        
+        if(numCharMistakes == -1)
+        {
+            goto skip;
+        }
+
         //Need to then open the UI to the results screen!
         DeactivateThenActivate(GetTransformByName("Results")); 
 
@@ -165,6 +173,9 @@ public class UIHandler : MonoBehaviour
         {
             Debug.LogError("Failed to find the active UI for results!");
         }
+
+        skip:
+        
         levelHandler.StopLevelHandler();
         inputHandler.StopInputHandler();
     }
@@ -368,13 +379,9 @@ public class UIHandler : MonoBehaviour
             return;
         }
 
-        Transform parent = thing;
 
-        while (parent != null)
-        {
-            parent.gameObject.SetActive(true);
-            parent = parent.parent;
-        }
+
+        
 
         foreach (Transform child in thing.GetComponentsInChildren<Transform>(true))
         {
@@ -430,7 +437,7 @@ public class UIHandler : MonoBehaviour
         foreach(Transform element in elements)
         {
            //Debug.Log("\n"+ element.name + "\n" + thing.name);
-           if (element == thing || element.IsChildOf(thing.transform) || string.Equals(element.name,"Background - Main"))
+           if (element == thing || element.IsChildOf(thing.transform) || string.Equals(element.name,"Background - Main") || string.Equals(element.name,"Canvas"))
            {
                 continue;
            }
