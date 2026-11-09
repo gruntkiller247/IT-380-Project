@@ -100,6 +100,7 @@ public class LevelHandler : MonoBehaviour
         int c = 0;
         string temp = "";
         List<string> wordList = new List<string>();
+        
 
         if(levelName == null)
         {

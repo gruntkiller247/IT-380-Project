@@ -80,11 +80,15 @@ public class InputHandler : MonoBehaviour
             {
                 if(needUpdateWord == true)
                 {
-                    Debug.Log("Need Update Word");
+                    //Debug.Log("Need Update Word");
                     //Code that updates the InputHandler with the next word to write + resets everything to default values.
                     uiHandler.UpdateNextWord();
                     currentWord = uiHandler.GetWordToWrite();
                     
+                    //Chef text changes to a positve statement!
+                    //Tell UI to update his text to a positive one
+                    //UI.updateChef(enum pos)
+                   
 
                     //Ending the level check!
                     if(currentWord == null)
@@ -146,11 +150,17 @@ public class InputHandler : MonoBehaviour
                             ColorChar(c,'g');
                             numGreen++;
                             currentWordIndex++;
+
+                            UIHandler.UpdateChefWord(UIHandler.ChefVals.CV_POS);
                         }
                         else
                         {
                             missedChars++;
                             ColorChar(c,'r');
+
+                            //Tell UI to make Chef say something negative/You'll get it next time!
+                            //UI.updateChef(enum pos)
+                            UIHandler.UpdateChefWord(UIHandler.ChefVals.CV_NEG);
                         }
                         colorlessText +=  c;
                         //Debug.Log("\nColorless: " + colorlessText);

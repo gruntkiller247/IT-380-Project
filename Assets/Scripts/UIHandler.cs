@@ -1,7 +1,9 @@
 using System;
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
+using System.Collections.Generic;
+
+
 
 public class UIHandler : MonoBehaviour
 {
@@ -11,15 +13,35 @@ public class UIHandler : MonoBehaviour
     [SerializeField] static String nameOfWordBox = "Word";
 
     [SerializeField] static String nameOfResultsBox = "Score";
+
+    [SerializeField] static String nameOfChefBox = "Chef Text";
     private static Transform[] elements; 
     
     private LevelHandler levelHandler;
     private InputHandler inputHandler;
+
+    private static List<string> chefPosWords;
+    private static List<string> chefNegWords; 
+
+    public enum ChefVals
+    {
+        CV_POS = 0,
+        CV_NEG,
+    }
+
+
     void Start()
     {
+        chefPosWords = new List<string>();
+        chefNegWords = new List<string>();
+        
         if(elements == null)
         {
             elements = menus.GetComponentsInChildren<Transform>(true);
+            if(elements == null)
+            {
+                Debug.LogError("UI Handler failed to get elements in the Canvas!");
+            }
         }
 
         if(levelHandler == null)
@@ -27,7 +49,7 @@ public class UIHandler : MonoBehaviour
             levelHandler = GetComponent<LevelHandler>();
             if(levelHandler == null)
             {
-                Debug.LogError("Input handler failed to get LevelHandler!");
+                Debug.LogError("UIhandler failed to get LevelHandler!");
             }
         }
 
@@ -41,18 +63,10 @@ public class UIHandler : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    public void ReturnToLevelSelect()
-    {
-        DeactivateThenActivate(GetTransformByName("Level Select"));
-        EndLevel(-1,-1);
-    }
 
+
+    /*
     public void ToEasyLevel()
     {
         DeactivateThenActivate(GetTransformByName("Level Easy"));
@@ -67,19 +81,9 @@ public class UIHandler : MonoBehaviour
     {
         DeactivateThenActivate(GetTransformByName("Level Hard"));
     }
+    */
 
-    public void ToTestLevel()
-    {
-        DeactivateThenActivate(GetTransformByName("Level Test"));
-        StartLevel("Level Test");
-    }
-
-
-    public void ToLevelSelect()
-    {
-        DeactivateThenActivate(GetTransformByName("Level Select"));   
-    }
-
+    /*
     public void ToTutorial()
     {
         Transform thing;
@@ -96,26 +100,23 @@ public class UIHandler : MonoBehaviour
         DeactivateThenActivate(thing);
         
     }
-
-    /*
-
     */
-    public static Transform GetResultsTextFromCurrentUI()
+
+    public void ReturnToLevelSelect()
     {
-        Transform currentActive = GetActiveUI();
-        
-        
-        foreach(Transform element in currentActive)
-        {
-            
-            if(string.Equals(element.name,nameOfResultsBox))
-            {
-                return element;
-            }
+        DeactivateThenActivate(GetTransformByName("Level Select"));
+        EndLevel(-1,-1);
+    }
 
-        }
+    public void ToTestLevel()
+    {
+        DeactivateThenActivate(GetTransformByName("Level Test"));
+        StartLevel("Level Test");
+    }
 
-        return null;
+    public void ToLevelSelect()
+    {
+        DeactivateThenActivate(GetTransformByName("Level Select"));   
     }
 
     
@@ -190,6 +191,7 @@ public class UIHandler : MonoBehaviour
         Recieves a string that is the name of the screen to go to. IE "Home"
         Deactives the current level + stops the input manager. Does not change the UI menu!
         Returns nothing.
+        Not currently used, end level has taken over use cases
     */
     public void StopLevel(String levelName)
     {
@@ -227,10 +229,108 @@ public class UIHandler : MonoBehaviour
         levelHandler.StartLevelHandler(levelName);
     }
 
+    static public void UpdateChefWord(ChefVals val)
+    {
+        Transform chefBox;
+        TMP_Text text;
+        UnityEngine.Object[] file;
+        String temp = "";
+        int c;
+
+
+        chefBox = GetChefTextFromCurrentUI();
+
+        if(chefBox == null)
+        {
+            Debug.Log("Failed to find the chef's box!");
+            return;
+        }
+
+        text = chefBox.GetComponent<TMP_Text>();
+
+        if(text == null)
+        {
+            Debug.LogError("Failed to find the chef box's TMP_Text component!");
+            return;        
+        }
+        
+
+
+        switch(val)
+        {
+            case ChefVals.CV_POS:
+
+                if(chefPosWords.Count == 0)
+                {
+                    //Load it
+                    file = Resources.LoadAll("Chef/Jeers Good",typeof(TextAsset));
+                    //file[0] = Good!,Love!
+
+                    for(c = 0;c < file[0].ToString().Length;c++)
+                    {
+                        
+                        if(file[0].ToString()[c].CompareTo(',') != 0)
+                        {
+                            temp = temp + file[0].ToString()[c];
+                        }
+                        else
+                        {
+                            //Hit a csv spot
+                            chefPosWords.Add(temp);
+                            temp = "";
+                        }
+                    }
+                    chefPosWords.Add(temp);
+                }
+
+                c = UnityEngine.Random.Range(0,chefPosWords.Count);
+                text.text = chefPosWords[c];
+
+
+                break;
+
+            case ChefVals.CV_NEG:
+               
+                if(chefNegWords.Count == 0)
+                {
+                    //Load it
+                    file = Resources.LoadAll("Chef/Jeers Bad",typeof(TextAsset));
+                    //file[0] = Good!,Love!
+
+                    for(c = 0;c < file[0].ToString().Length;c++)
+                    {
+                        
+                        if(file[0].ToString()[c].CompareTo(',') != 0)
+                        {
+                            temp = temp + file[0].ToString()[c];
+                        }
+                        else
+                        {
+                            //Hit a csv spot
+                            chefNegWords.Add(temp);
+                            temp = "";
+                        }
+                    }
+                    chefNegWords.Add(temp);
+                }
+
+                c = UnityEngine.Random.Range(0,chefNegWords.Count);
+                text.text = chefNegWords[c];
+
+                break;
+            
+            default:
+
+                Debug.Log("Chef has no state for this!");
+                break;
+        }
+    }
+
+
+
     /*
         Returns the next word or null
     */
-
     public string GetWordToWrite()
     {
         return levelHandler.GetWordToWrite();
@@ -274,7 +374,31 @@ public class UIHandler : MonoBehaviour
     }
 
     /*
+        Iterates through the elment list to find the Results Text in the current active UI elements
+        Returns the result's transform or NULL
+    */
+    public static Transform GetResultsTextFromCurrentUI()
+    {
+        Transform currentActive = GetActiveUI();
+        
+        
+        foreach(Transform element in currentActive)
+        {
+            
+            if(string.Equals(element.name,nameOfResultsBox))
+            {
+                return element;
+            }
 
+        }
+
+        return null;
+    }
+
+
+    /*
+        Recieves the name of a transform
+        Returns the named transform or NULL
     */
     public static Transform GetNamedTextFromCurrentUI(string name)
     {
@@ -290,6 +414,24 @@ public class UIHandler : MonoBehaviour
         }
 
         return null;
+    }
+
+    /*
+        Returns the current active UI's chef jeer box.
+        Returns NULL in all other cases
+    */
+    public static Transform GetChefTextFromCurrentUI()
+    {
+        Transform currentActive = GetActiveUI();
+
+        foreach(Transform element in currentActive)
+        {
+            if(string.Equals(element.name,nameOfChefBox))
+            {
+                return element;
+            }
+        }
+        return null;    
     }
 
     /*
@@ -382,10 +524,6 @@ public class UIHandler : MonoBehaviour
             Debug.LogError("Given a null transform!");
             return;
         }
-
-
-
-        
 
         foreach (Transform child in thing.GetComponentsInChildren<Transform>(true))
         {
