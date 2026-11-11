@@ -283,8 +283,13 @@ public class UIHandler : MonoBehaviour
                     chefPosWords.Add(temp);
                 }
 
-                c = UnityEngine.Random.Range(0,chefPosWords.Count);
-                text.text = chefPosWords[c];
+                
+                if(UnityEngine.Random.Range(0,10) < 6)
+                {
+                    c = UnityEngine.Random.Range(0,chefPosWords.Count);
+                    text.text = chefPosWords[c];
+                }
+                
 
 
                 break;
@@ -314,8 +319,11 @@ public class UIHandler : MonoBehaviour
                     chefNegWords.Add(temp);
                 }
 
-                c = UnityEngine.Random.Range(0,chefNegWords.Count);
-                text.text = chefNegWords[c];
+                if(UnityEngine.Random.Range(0,10) < 4)
+                {
+                    c = UnityEngine.Random.Range(0,chefNegWords.Count);
+                    text.text = chefNegWords[c];
+                }
 
                 break;
             
