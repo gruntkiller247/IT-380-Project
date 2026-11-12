@@ -19,6 +19,8 @@ public class UIHandler : MonoBehaviour
 
     [SerializeField] static String nameOfHardcoreToggle = "Toggle";
 
+    [SerializeField] static String nameOfSlider = "Slider";
+
     //[SerializeField] Toggle toggle;
     private static Transform[] elements; 
     
@@ -27,8 +29,12 @@ public class UIHandler : MonoBehaviour
 
     private static List<string> chefPosWords;
     private static List<string> chefNegWords; 
-   
-    private static bool hardcoreMode = false;
+
+    private static int levelDifficulty = 0;
+
+    private static Slider slider = null;
+
+    private static Transform sliderTransform = null;
 
     public enum ChefVals
     {
@@ -139,18 +145,28 @@ public class UIHandler : MonoBehaviour
     }
     */
 
+    public static void SliderChange()
+    {
+        Transform trans;
+        levelDifficulty = (int) GetSlider().value;
+
+        trans = GetSliderTextTransform();
+
+        if(trans != null)
+        {
+            trans.GetComponent<TMP_Text>().text = levelDifficulty.ToString();
+            
+        }
+        else
+        {
+            Debug.LogError("Failed to find the text box for Slider's Difficulty!");
+        }
+    }
+
     public static void ToggleHardcoreMode()
     {
-        //Debug.Log("Test");
-
         InputHandler.SetHardcore();
     }
-
-    public static bool GetHardcoreMode()
-    {
-        return hardcoreMode;
-    }
-
 
     public void ReturnToLevelSelect()
     {
@@ -160,21 +176,26 @@ public class UIHandler : MonoBehaviour
 
     public void ToTestLevel()
     {
+        //Debug.Log("Level Test " + levelDifficulty.ToString());
         DeactivateThenActivate(GetTransformByName("Level Test"));
-        StartLevel("Level Test");
+        StartLevel("Level Test " + levelDifficulty.ToString());
     }
 
+    /*
     public void ToTestLevel2()
     {
         DeactivateThenActivate(GetTransformByName("Level Test 2"));
-        StartLevel("Level Test 2");
+        StartLevel("Level Test" + levelDifficulty.ToString());
     }
 
     public void ToTestLevel3()
     {
         DeactivateThenActivate(GetTransformByName("Level Test 3"));
-        StartLevel("Level Test 3");
+        StartLevel("Level Test" + levelDifficulty.ToString());
     }
+    */
+
+    
 
     public void ToLevelSelect()
     {
@@ -277,6 +298,7 @@ public class UIHandler : MonoBehaviour
     */
     public void StartLevel(String levelName)
     {
+        /*
         Transform level;
         level = GetTransformByName(levelName);
 
@@ -285,6 +307,7 @@ public class UIHandler : MonoBehaviour
             Debug.LogError("Start Level failed to find a level! Nothing was started!");
             return;
         }
+        */
 
         //Must call the stack in this order!
         inputHandler.StartInputHandler();
@@ -675,9 +698,50 @@ public class UIHandler : MonoBehaviour
         {
             //Debug.Log(element.name);
             if(string.Equals(element.name,name))
+            {              
                 return element;
+            }
+               
         }
             
+
+        return null;
+    }
+
+    public static Transform GetSliderTextTransform()
+    {
+        if(sliderTransform != null)
+        {
+            return sliderTransform;
+        }
+
+        foreach(Transform element in elements)
+        {
+            if(String.Equals(element.name,"Slider Text"))
+            {
+                sliderTransform = element;
+                return element;
+            }
+        }
+
+        return null;
+    }
+
+    public static Slider GetSlider()
+    {
+        if(slider != null)
+        {
+            return slider;
+        }
+
+        foreach(Transform element in elements)
+        {
+            if(String.Equals(element.name,nameOfSlider))
+            {
+                slider = element.GetComponent<Slider>();
+                return slider;
+            }
+        }
 
         return null;
     }
