@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 
 
@@ -15,6 +16,10 @@ public class UIHandler : MonoBehaviour
     [SerializeField] static String nameOfResultsBox = "Score";
 
     [SerializeField] static String nameOfChefBox = "Chef Text";
+
+    [SerializeField] static String nameOfHardcoreToggle = "Toggle";
+
+    //[SerializeField] Toggle toggle;
     private static Transform[] elements; 
     
     private LevelHandler levelHandler;
@@ -22,6 +27,8 @@ public class UIHandler : MonoBehaviour
 
     private static List<string> chefPosWords;
     private static List<string> chefNegWords; 
+   
+    private static bool hardcoreMode = false;
 
     public enum ChefVals
     {
@@ -61,8 +68,38 @@ public class UIHandler : MonoBehaviour
                 Debug.LogError("UIHandler failed to find the InputHandler!");
             }
         }
-    }
 
+        /*
+        if(toggle == null)
+        {
+            toggle = GetToggle();
+            if(toggle == null)
+            {
+                Debug.LogError("Failed to find refrence to Hardcore Toggle!");
+            }
+        }
+        */
+    }
+    
+    /*
+    private static Toggle GetToggle()
+    {
+        if(elements == null)
+        {
+            Debug.LogError("Cannot look for Toggle when elements is null!");
+            return null;
+        }
+
+        foreach(Transform element in elements)
+        {
+            //Debug.Log(element.name);
+            if(string.Equals(element.name,nameOfHardcoreToggle))
+                return element.GetComponent<Toggle>();
+        }
+        
+        return null;
+    }
+    */
 
 
 
@@ -102,6 +139,19 @@ public class UIHandler : MonoBehaviour
     }
     */
 
+    public static void ToggleHardcoreMode()
+    {
+        //Debug.Log("Test");
+
+        InputHandler.SetHardcore();
+    }
+
+    public static bool GetHardcoreMode()
+    {
+        return hardcoreMode;
+    }
+
+
     public void ReturnToLevelSelect()
     {
         DeactivateThenActivate(GetTransformByName("Level Select"));
@@ -112,6 +162,18 @@ public class UIHandler : MonoBehaviour
     {
         DeactivateThenActivate(GetTransformByName("Level Test"));
         StartLevel("Level Test");
+    }
+
+    public void ToTestLevel2()
+    {
+        DeactivateThenActivate(GetTransformByName("Level Test 2"));
+        StartLevel("Level Test 2");
+    }
+
+    public void ToTestLevel3()
+    {
+        DeactivateThenActivate(GetTransformByName("Level Test 3"));
+        StartLevel("Level Test 3");
     }
 
     public void ToLevelSelect()
@@ -513,7 +575,7 @@ public class UIHandler : MonoBehaviour
     {
         if(thing == null)
         {
-            Debug.LogError("Deactuvate then Activate: Given a null UI!");
+            Debug.LogError("Deactivate then Activate: Given a null UI!");
             return;
         }
 
@@ -601,7 +663,7 @@ public class UIHandler : MonoBehaviour
         Iterates through the element array looking for the named canvas.
         Returns the canvas or null
     */
-    public Transform GetTransformByName(string name)
+    public static Transform GetTransformByName(string name)
     {
         if(name == null)
         {
@@ -612,7 +674,6 @@ public class UIHandler : MonoBehaviour
         foreach(Transform element in elements)
         {
             //Debug.Log(element.name);
-
             if(string.Equals(element.name,name))
                 return element;
         }
@@ -620,6 +681,7 @@ public class UIHandler : MonoBehaviour
 
         return null;
     }
+
 
 
 }

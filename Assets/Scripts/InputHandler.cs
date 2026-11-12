@@ -32,6 +32,8 @@ public class InputHandler : MonoBehaviour
     private int missedChars = 0;
 
     private float inputStartTime = 0f;
+
+    private static bool isHardcore = false;
     
 
     //This script speaks to the UIHandler and ask how the game should be handled
@@ -147,9 +149,9 @@ public class InputHandler : MonoBehaviour
                     {
                         if(ValidateText(c) == true)
                         {
-                            ColorChar(c,'g');
                             numGreen++;
                             currentWordIndex++;
+                            ColorChar(c,'g');
 
                             UIHandler.UpdateChefWord(UIHandler.ChefVals.CV_POS);
                         }
@@ -157,6 +159,14 @@ public class InputHandler : MonoBehaviour
                         {
                             missedChars++;
                             ColorChar(c,'r');
+
+                            if(isHardcore)
+                            {
+                                currentWord = null;    
+                                numGreen = currentWord.Length;
+                            }
+                            
+
 
                             //Tell UI to make Chef say something negative/You'll get it next time!
                             //UI.updateChef(enum pos)
@@ -347,7 +357,19 @@ public class InputHandler : MonoBehaviour
 
         }
 
+    }
 
-
+    public static void SetHardcore()
+    {
+        if(isHardcore)
+        {
+            //Debug.Log("Hardcore: false");
+            isHardcore = false;
+        }
+        else
+        {
+            //Debug.Log("Hardcore: true");
+            isHardcore = true;
+        }
     }
 }
