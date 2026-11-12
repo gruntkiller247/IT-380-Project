@@ -215,7 +215,7 @@ public class UIHandler : MonoBehaviour
         if(element != null)
         {
             
-            endText = "You made: " + numCharMistakes + " mistakes!\nYou took " +  ((Time.time - levelStartTime)).ToString() + " seconds!"; 
+            endText = "You made: " + numCharMistakes + " mistakes!\nYou took " +  ((Time.time - levelStartTime)).ToString("0.##") + " seconds!"; 
             
             element = GetNamedTextFromCurrentUI("Score");
 

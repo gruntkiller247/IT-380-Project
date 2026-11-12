@@ -87,6 +87,8 @@ public class InputHandler : MonoBehaviour
                     uiHandler.UpdateNextWord();
                     currentWord = uiHandler.GetWordToWrite();
                     
+
+                    
                     //Chef text changes to a positve statement!
                     //Tell UI to update his text to a positive one
                     //UI.updateChef(enum pos)
@@ -98,6 +100,7 @@ public class InputHandler : MonoBehaviour
                         //Debug.Log("Current Word is NULL!");
                         uiUpdated = false;
                         inUse = false;
+                        needUpdateWord = false;
 
                         uiHandler.EndLevel(missedChars,inputStartTime);
                         //Send data on missed words etc here!
@@ -160,17 +163,22 @@ public class InputHandler : MonoBehaviour
                             missedChars++;
                             ColorChar(c,'r');
 
-                            if(isHardcore)
+                            //Tell UI to make Chef say something negative/You'll get it next time!
+                            //UI.updateChef(enum pos)
+                            UIHandler.UpdateChefWord(UIHandler.ChefVals.CV_NEG);
+
+                            if(isHardcore == true)
                             {
-                                currentWord = null;    
-                                numGreen = currentWord.Length;
+                                uiUpdated = false;
+                                inUse = false;
+                                needUpdateWord = false;
+
+                                uiHandler.EndLevel(missedChars,inputStartTime);
                             }
                             
 
 
-                            //Tell UI to make Chef say something negative/You'll get it next time!
-                            //UI.updateChef(enum pos)
-                            UIHandler.UpdateChefWord(UIHandler.ChefVals.CV_NEG);
+
                         }
                         colorlessText +=  c;
                         //Debug.Log("\nColorless: " + colorlessText);
